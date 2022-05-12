@@ -2,14 +2,16 @@ package com.example.webpos.db;
 
 import com.example.webpos.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-@Repository
+//@Repository
 public class AmazonMysqlDB implements PosDB {
 
     private LinkedList<Product> products = new LinkedList<>();

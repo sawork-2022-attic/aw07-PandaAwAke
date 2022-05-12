@@ -1,8 +1,9 @@
 package com.example.webpos.web;
 
+import com.example.webpos.biz.OrderService;
 import com.example.webpos.biz.PosService;
 import com.example.webpos.model.Cart;
-import com.example.webpos.model.Item;
+import com.example.webpos.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,8 @@ public class PosController {
     private HttpSession session;
 
     private PosService posService;
+
+    private OrderService orderService;
 
     private Cart cart;
 
@@ -44,6 +47,11 @@ public class PosController {
         this.posService = posService;
     }
 
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
     @GetMapping("/")
     public String pos(Model model) {
         model.addAttribute("products", posService.products());
@@ -58,4 +66,16 @@ public class PosController {
         model.addAttribute("cart", getCart());
         return "index";
     }
+
+    @GetMapping("/submit")
+    public String submit(Model model) {
+        orderService.postOrder(new Order(getCart()));
+        getCart().getItems().clear();
+        saveCart(getCart());
+
+        model.addAttribute("products", posService.products());
+        model.addAttribute("cart", getCart());
+        return "index";
+    }
+
 }
